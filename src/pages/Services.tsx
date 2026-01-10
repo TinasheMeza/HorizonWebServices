@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Globe, Code, TrendingUp, Share2, Image, Settings } from 'lucide-react'
-import SectionTitle from '@/components/SectionTitle'
 import ServiceCard from '@/components/ServiceCard'
 import { PricingTier } from '@/components/ServiceCard'
 import NeonButton from '@/components/NeonButton'
@@ -273,7 +272,7 @@ export default function Services() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-16">
-            {services.map((service, idx) => (
+            {services.map((service) => (
               <div key={service.id} id={service.id}>
                 <ServiceCard
                   title={service.title}

@@ -2,9 +2,24 @@
 // Note: The @base44/sdk package may need to be installed or replaced with actual SDK
 // For now, we'll create a mock implementation that works without the SDK
 
-let base44Instance: any = null
+interface Base44Entity {
+  id?: string
+  [key: string]: unknown
+}
+
+interface Base44SDK {
+  entities: {
+    create: (entityName: string, data: Record<string, unknown>) => Promise<Base44Entity>
+  }
+  integrations: {
+    trigger: (type: string, data: Record<string, unknown>) => Promise<boolean>
+  }
+}
 
 // Try to initialize Base44 SDK
+// eslint-disable-next-line prefer-const
+let base44Instance: Base44SDK | null = null
+
 try {
   // Dynamic import for Base44 SDK (if available)
   const projectId = import.meta.env.VITE_BASE44_PROJECT_ID || ''
@@ -12,6 +27,7 @@ try {
   
   if (projectId && apiKey) {
     // Note: Replace this with actual Base44 SDK import when available
+    // When uncommented, this will reassign base44Instance:
     // const { Base44 } = await import('@base44/sdk')
     // base44Instance = new Base44({ projectId, apiKey })
   }
@@ -20,15 +36,15 @@ try {
 }
 
 // Mock implementation for development/testing
-const mockBase44 = {
+const mockBase44: Base44SDK = {
   entities: {
-    create: async (entityName: string, data: any) => {
+    create: async (entityName: string, data: Record<string, unknown>) => {
       console.log('Mock: Creating entity', entityName, data)
       return { id: 'mock-id', ...data, createdAt: new Date().toISOString() }
     },
   },
   integrations: {
-    trigger: async (type: string, data: any) => {
+    trigger: async (type: string, data: Record<string, unknown>) => {
       console.log('Mock: Triggering integration', type, data)
       return true
     },
@@ -66,7 +82,18 @@ export async function createQuoteRequest(data: Omit<QuoteRequest, 'id' | 'status
       status: 'pending',
     })
     
-    return response as QuoteRequest
+    return {
+      id: response.id as string | undefined,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      service: data.service,
+      budgetRange: data.budgetRange,
+      projectDescription: data.projectDescription,
+      fileUrl: data.fileUrl,
+      status: 'pending',
+      createdAt: (response.createdAt as string | undefined) || new Date().toISOString(),
+    } as QuoteRequest
   } catch (error) {
     console.error('Error creating quote request:', error)
     throw error

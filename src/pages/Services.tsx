@@ -5,7 +5,18 @@ import ServiceCard from '@/components/ServiceCard'
 import { PricingTier } from '@/components/ServiceCard'
 import NeonButton from '@/components/NeonButton'
 
-const services = [
+interface Service {
+  id: string
+  title: string
+  description: string
+  icon: React.ReactNode
+  tiers?: PricingTier[]
+  customPricing?: boolean
+  customFeatures?: string[]
+  monthlySupport?: number
+}
+
+const services: Service[] = [
   {
     id: 'websites',
     title: 'Custom Websites',
@@ -281,7 +292,7 @@ export default function Services() {
                   tiers={service.tiers}
                   customPricing={service.customPricing}
                   customFeatures={service.customFeatures}
-                  monthlySupport={(service as any).monthlySupport}
+                  monthlySupport={service.monthlySupport}
                 />
               </div>
             ))}

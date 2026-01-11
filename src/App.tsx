@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CookieConsent from './components/CookieConsent'
@@ -21,6 +22,7 @@ function App() {
       </main>
       <Footer />
       <CookieConsent />
+      <Analytics />
     </div>
   )
 }

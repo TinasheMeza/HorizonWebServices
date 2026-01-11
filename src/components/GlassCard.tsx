@@ -9,13 +9,12 @@ interface GlassCardProps {
   hover?: boolean
 }
 
-export default function GlassCard({ children, className, dark = false, hover = true }: GlassCardProps) {
+export default function GlassCard({ children, className, hover = true }: GlassCardProps) {
   return (
     <motion.div
       className={cn(
-        'rounded-2xl p-6',
-        dark ? 'glass-dark' : 'glass',
-        hover && 'transition-all duration-300 hover:shadow-xl hover:scale-[1.02]',
+        'rounded-xl p-6 bg-white border border-gray-200 shadow-md',
+        hover && 'transition-all duration-300 hover:shadow-lg',
         className
       )}
       initial={{ opacity: 0, y: 20 }}

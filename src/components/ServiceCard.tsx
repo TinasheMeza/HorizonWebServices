@@ -37,14 +37,14 @@ export default function ServiceCard({
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <GlassCard className={cn('h-full flex flex-col', className)}>
-      <div className="flex items-start gap-4 mb-4">
-        <div className="text-4xl text-primary">{icon}</div>
-        <div className="flex-1">
-          <h3 className="text-2xl font-bold mb-2">{title}</h3>
-          <p className="text-gray-600 mb-3">{description}</p>
+    <GlassCard className={cn('h-full flex flex-col transition-all duration-300 hover:border-primary hover:border-2', className)}>
+      <div className="flex items-start gap-3 mb-3">
+        <div className="text-3xl text-primary flex-shrink-0">{icon}</div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-xl font-bold mb-1.5">{title}</h3>
+          <p className="text-gray-600 text-sm mb-2.5 leading-relaxed">{description}</p>
           {monthlySupport && (
-            <span className="inline-block px-3 py-1 bg-cyan-50 border border-cyan-200/50 rounded-full text-sm font-medium text-gray-800">
+            <span className="inline-block px-2.5 py-1 bg-cyan-50 border border-cyan-200/50 rounded-full text-xs font-medium text-gray-800">
               Monthly Support: {formatCurrency(monthlySupport)}/month
             </span>
           )}
@@ -75,11 +75,13 @@ export default function ServiceCard({
         <div className="mt-auto">
           <motion.button
             onClick={() => setExpanded(!expanded)}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+            className="w-full flex items-center justify-between p-3.5 rounded-lg bg-primary/5 border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            aria-expanded={expanded}
+            aria-label={expanded ? 'Hide pricing' : 'Show pricing'}
           >
-            <span className="font-semibold">View Pricing</span>
+            <span className="font-semibold text-gray-900">View Pricing</span>
             <ChevronDown
-              className={cn('transition-transform', expanded && 'rotate-180')}
+              className={cn('transition-transform text-primary', expanded && 'rotate-180')}
             />
           </motion.button>
 
@@ -92,41 +94,41 @@ export default function ServiceCard({
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden mt-4"
               >
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tiers.map((tier, idx) => (
                     <motion.div
                       key={idx}
                       className={cn(
-                        'p-4 rounded-lg border-2',
+                        'p-3.5 rounded-lg border-2',
                         tier.popular
                           ? 'border-primary bg-primary/5'
                           : 'border-gray-200 bg-white'
                       )}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
+                      transition={{ delay: idx * 0.05 }}
                     >
                       {tier.popular && (
-                        <span className="inline-block px-3 py-1 text-xs font-semibold bg-primary text-white rounded-full mb-2">
+                        <span className="inline-block px-2 py-0.5 text-xs font-semibold bg-primary text-white rounded-full mb-2">
                           Most Popular
                         </span>
                       )}
-                      <div className="flex items-baseline justify-between mb-3">
-                        <h5 className="font-bold text-lg">{tier.name}</h5>
-                        <span className="text-2xl font-bold gradient-text">
+                      <div className="flex items-baseline justify-between mb-2.5">
+                        <h5 className="font-bold text-base">{tier.name}</h5>
+                        <span className="text-xl font-bold gradient-text">
                           {tier.price === 'custom' ? 'Custom' : formatCurrency(tier.price)}
                         </span>
                       </div>
-                      <ul className="space-y-2 mb-4">
+                      <ul className="space-y-1.5 mb-3">
                         {tier.features.map((feature, fIdx) => (
                           <li key={fIdx} className="flex items-start gap-2">
-                            <Check className="text-primary mt-1 flex-shrink-0" size={16} />
-                            <span className="text-sm text-gray-700">{feature}</span>
+                            <Check className="text-primary mt-0.5 flex-shrink-0" size={14} />
+                            <span className="text-xs text-gray-700 leading-relaxed">{feature}</span>
                           </li>
                         ))}
                       </ul>
                       <NeonButton
-                        className="w-full text-sm py-2"
+                        className="w-full text-xs py-1.5"
                         onClick={() => window.location.href = '/contact?service=' + encodeURIComponent(title + ' - ' + tier.name)}
                       >
                         Get Started

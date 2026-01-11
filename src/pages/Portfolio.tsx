@@ -60,21 +60,9 @@ const projects: Project[] = [
 
 export default function Portfolio() {
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="gradient-text">Our Portfolio</span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Explore our recent work and see how we've helped businesses transform their digital presence.
-          </p>
-        </div>
-      </section>
-
+    <div className="pt-0">
       {/* Projects Carousel */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="Featured Projects"
@@ -85,12 +73,12 @@ export default function Portfolio() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-primary text-white">
+      <section className="py-12 md:py-16 bg-gradient-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-5">
             Ready to Start Your Project?
           </h2>
-          <p className="text-xl mb-8 text-white/90">
+          <p className="text-lg mb-8 text-white/90">
             Let's discuss how we can bring your vision to life with a custom solution tailored to your needs.
           </p>
           <a

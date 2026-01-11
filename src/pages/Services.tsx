@@ -29,10 +29,13 @@ const services: Service[] = [
         price: 4999,
         features: [
           'Up to 5 pages',
+          'Custom domain name',
+          'Web Hosting Includued',
+          'Logo Design Included',
           'Mobile responsive design',
           'Contact form integration',
           'Basic SEO setup',
-          '2 revision rounds',
+          '4 revision rounds',
         ],
       },
       {
@@ -165,7 +168,7 @@ const services: Service[] = [
         price: 499,
         features: [
           '1 design concept',
-          '2 revision rounds',
+          '3 revision rounds',
           'Social media formats',
           'High-resolution files',
           'Basic branding elements',
@@ -206,7 +209,7 @@ const services: Service[] = [
     tiers: [
       {
         name: 'Basic',
-        price: 999,
+        price: 350,
         features: [
           'Monthly updates',
           'Security monitoring',
@@ -261,19 +264,19 @@ export default function Services() {
   }, [preselectedService])
 
   return (
-    <div className="pt-20">
+    <div className="pt-0">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-cyan-50/50 via-purple-50/30 to-white">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 mb-6">
             <span className="text-primary">✨</span>
             Transparent Pricing
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold mb-5">
             <span className="text-gray-900">Our Services & </span>
             <span className="gradient-text">Pricing</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Clear, upfront pricing for all our services. No hidden fees, no surprises. Choose a package or let's create a custom solution together.
           </p>
         </div>
@@ -292,7 +295,7 @@ export default function Services() {
                   tiers={service.tiers}
                   customPricing={service.customPricing}
                   customFeatures={service.customFeatures}
-                  monthlySupport={service.monthlySupport}
+                  monthlySupport={(service as any).monthlySupport}
                 />
               </div>
             ))}
@@ -301,12 +304,12 @@ export default function Services() {
       </section>
 
       {/* Custom Solution CTA */}
-      <section className="py-20 bg-gradient-primary text-white">
+      <section className="py-12 md:py-16 bg-gradient-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-5">
             Need a Custom Solution?
           </h2>
-          <p className="text-xl mb-8 text-white/90">
+          <p className="text-lg mb-8 text-white/90">
             We specialize in creating tailored solutions that fit your unique business requirements. Let's discuss your project.
           </p>
           <NeonButton

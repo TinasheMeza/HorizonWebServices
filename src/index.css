@@ -13,7 +13,8 @@
     @apply border-gray-200;
   }
   body {
-    @apply bg-white text-gray-900 antialiased;
+    @apply bg-gradient-to-br from-blue-50 via-indigo-50/30 to-purple-50/20 text-gray-900 antialiased;
+    background-attachment: fixed;
   }
 }
 

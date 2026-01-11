@@ -158,20 +158,20 @@ export default function Contact() {
   }
 
   return (
-    <div className="pt-20">
+    <div className="pt-0">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
             <span className="gradient-text">Get in Touch</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Ready to start your project? Fill out the form below and we'll get back to you within 24 hours.
           </p>
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Contact Information */}
@@ -184,7 +184,7 @@ export default function Contact() {
                 </p>
               </div>
 
-              <GlassCard>
+              <GlassCard className="transition-all duration-300 hover:border-primary hover:border-2">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <Mail className="text-primary" size={24} />
@@ -202,7 +202,7 @@ export default function Contact() {
                 </div>
               </GlassCard>
 
-              <GlassCard>
+              <GlassCard className="transition-all duration-300 hover:border-primary hover:border-2">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0">
                     <Phone className="text-secondary" size={24} />
@@ -220,7 +220,7 @@ export default function Contact() {
                 </div>
               </GlassCard>
 
-              <GlassCard>
+              <GlassCard className="transition-all duration-300 hover:border-primary hover:border-2">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
                     <Clock className="text-accent" size={24} />
@@ -236,7 +236,7 @@ export default function Contact() {
               </GlassCard>
 
               {/* Quick Response Guarantee */}
-              <GlassCard className="bg-cyan-50 border-cyan-200/50">
+              <GlassCard className="bg-cyan-50 border-cyan-200/50 transition-all duration-300 hover:border-primary hover:border-2">
                 <h3 className="font-semibold text-gray-900 mb-2">Quick Response Guarantee</h3>
                 <p className="text-gray-600 text-sm">
                   We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call us directly.

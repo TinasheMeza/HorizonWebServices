@@ -97,95 +97,63 @@ const testimonials = [
 
 export default function Home() {
   return (
-    <div className="pt-20">
+    <div className="pt-0">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        {/* Floating Images/Shapes */}
-        <div className="absolute inset-0 overflow-hidden">
+      <section className="relative py-16 md:py-20 flex items-center justify-center overflow-hidden">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            className="absolute top-20 left-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl"
-            animate={{
-              y: [0, -30, 0],
-              x: [0, 20, 0],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-          <motion.div
-            className="absolute top-40 right-20 w-40 h-40 bg-secondary/20 rounded-full blur-3xl"
-            animate={{
-              y: [0, 30, 0],
-              x: [0, -20, 0],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-          <motion.div
-            className="absolute bottom-20 left-1/3 w-36 h-36 bg-accent/20 rounded-full blur-3xl"
-            animate={{
-              y: [0, -25, 0],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 7,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-6"
-            initial={{ opacity: 0, y: 30 }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 mb-6"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
           >
-            <span className="text-white">Transform Your </span>
-            <span className="gradient-text">Digital Presence</span>
+            <span className="text-primary">✨</span>
+            Horizon Web Services
+          </motion.div>
+          <motion.h1
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <span className="text-gray-900">Web Design & Digital Marketing for </span>
+            <span className="gradient-text block md:inline">Personal Brands & Businesses</span>
           </motion.h1>
           <motion.p
-            className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
+            className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
           >
-            Professional web design and digital marketing services to help your business thrive online.
+            Get a modern website that grows your business. We handle design, development, and marketing so you can focus on what matters.
           </motion.p>
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 30 }}
+            className="flex flex-col sm:flex-row gap-3 justify-center"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
           >
             <NeonButton onClick={() => (window.location.href = '/contact')}>
-              Get Started Today
+              Get a Free Quote
             </NeonButton>
             <NeonButton
               variant="outline"
-              onClick={() => (window.location.href = '/portfolio')}
-              className="bg-white/10 border-white/30 text-white hover:bg-white/20"
+              onClick={() => (window.location.href = '/services')}
             >
-              View Our Work
+              View Services
             </NeonButton>
           </motion.div>
         </div>
       </section>
 
       {/* Services Overview */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="What We Do"
             subtitle="From concept to launch, we deliver digital solutions that make an impact."
           />
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {services.map((service, idx) => (
               <ServiceCard
                 key={idx}
@@ -196,7 +164,7 @@ export default function Home() {
               />
             ))}
           </div>
-          <div className="text-center mt-12">
+          <div className="text-center mt-10">
             <NeonButton onClick={() => (window.location.href = '/services')} variant="outline">
               View All Services & Pricing →
             </NeonButton>
@@ -205,7 +173,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="Why Choose Horizon"
@@ -226,25 +194,25 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="What Clients Say"
             subtitle="Don't just take our word for it — hear from those who've worked with us"
           />
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, idx) => (
-              <GlassCard key={idx} className="relative">
-                <div className="flex items-center gap-1 mb-4">
+              <GlassCard key={idx} className="relative border border-gray-200">
+                <div className="flex items-center gap-1 mb-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="fill-yellow-400 text-yellow-400" size={20} />
+                    <Star key={i} className="fill-amber-400 text-amber-400" size={16} />
                   ))}
                 </div>
-                <Quote className="text-primary mb-4 absolute top-6 right-6 opacity-50" size={48} />
-                <p className="text-gray-700 mb-6 italic">"{testimonial.text}"</p>
-                <div>
-                  <p className="font-bold text-gray-900">Client Testimonial</p>
-                  <p className="text-sm text-gray-600 mt-1">{testimonial.role}</p>
+                <Quote className="text-gray-300 mb-3 absolute top-4 right-4" size={32} />
+                <p className="text-gray-700 mb-5 text-sm leading-relaxed">"{testimonial.text}"</p>
+                <div className="pt-4 border-t border-gray-100">
+                  <p className="font-semibold text-gray-900 text-sm">Client Testimonial</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{testimonial.role}</p>
                 </div>
               </GlassCard>
             ))}
@@ -256,10 +224,10 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-primary text-white">
+      <section className="py-12 md:py-16 bg-gradient-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2
-            className="text-4xl md:text-5xl font-bold mb-6"
+            className="text-3xl md:text-4xl font-bold mb-5"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -268,7 +236,7 @@ export default function Home() {
             Ready to Get Started?
           </motion.h2>
           <motion.p
-            className="text-xl mb-8 text-white/90"
+            className="text-lg mb-8 text-white/90"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

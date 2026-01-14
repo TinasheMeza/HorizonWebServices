@@ -158,7 +158,7 @@ export default function Portfolio() {
   return (
     <div className="pt-0">
       {/* SEO-Optimized Portfolio Section */}
-      <section className="py-12 md:py-16" aria-label="Portfolio projects">
+      <section className="py-8 sm:py-12 md:py-16" aria-label="Portfolio projects">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* SEO-Optimized Heading */}
           <SectionTitle
@@ -177,11 +177,11 @@ export default function Portfolio() {
           </div>
 
           {/* Live Projects Section */}
-          <section className="mb-12" aria-label="Live portfolio projects">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">
+          <section className="mb-8 sm:mb-12" aria-label="Live portfolio projects">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-900">
               Live Projects
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8" role="list">
               {liveProjects.map((project, index) => (
                 <div key={project.id} role="listitem">
                   <PortfolioCard
@@ -196,10 +196,10 @@ export default function Portfolio() {
 
           {/* Upcoming Projects Section */}
           <section aria-label="Upcoming portfolio projects">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-900">
               Upcoming Projects
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8" role="list">
               {upcomingProjects.map((project, index) => (
                 <div key={project.id} role="listitem">
                   <PortfolioCard
@@ -241,18 +241,18 @@ export default function Portfolio() {
       />
 
       {/* CTA Section */}
-      <section className="py-12 md:py-16 bg-gradient-primary text-white">
+      <section className="py-8 sm:py-12 md:py-16 bg-gradient-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-5">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5">
             Ready to Start Your Project?
           </h2>
-          <p className="text-lg mb-8 text-white/90">
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 text-white/90">
             Let's discuss how we can bring your vision to life with a custom solution tailored to your needs. 
             Our professional web design services are designed to help your business grow.
           </p>
           <a
             href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary rounded-full font-semibold hover:bg-gray-100 transition-colors"
+            className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary rounded-full font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto"
           >
             Get in Touch
           </a>

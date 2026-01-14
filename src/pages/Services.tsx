@@ -266,26 +266,26 @@ export default function Services() {
   return (
     <div className="pt-0">
       {/* Hero Section */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 mb-6">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white border border-gray-200 rounded-full text-xs sm:text-sm font-medium text-gray-700 mb-4 sm:mb-6">
             <span className="text-primary">✨</span>
             Transparent Pricing
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-5">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-5 px-4">
             <span className="text-gray-900">Our Services & </span>
             <span className="gradient-text">Pricing</span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto px-4">
             Clear, upfront pricing for all our services. No hidden fees, no surprises. Choose a package or let's create a custom solution together.
           </p>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-16">
+          <div className="space-y-12 sm:space-y-16">
             {services.map((service) => (
               <div key={service.id} id={service.id}>
                 <ServiceCard
@@ -304,17 +304,17 @@ export default function Services() {
       </section>
 
       {/* Custom Solution CTA */}
-      <section className="py-12 md:py-16 bg-gradient-primary text-white">
+      <section className="py-8 sm:py-12 md:py-16 bg-gradient-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-5">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5">
             Need a Custom Solution?
           </h2>
-          <p className="text-lg mb-8 text-white/90">
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 text-white/90">
             We specialize in creating tailored solutions that fit your unique business requirements. Let's discuss your project.
           </p>
           <NeonButton
             onClick={() => (window.location.href = '/contact')}
-            className="bg-white text-primary hover:bg-gray-100"
+            className="bg-white text-primary hover:bg-gray-100 w-full sm:w-auto"
           >
             Request a Custom Quote
           </NeonButton>

@@ -12,7 +12,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Phone, Clock, Upload, AlertCircle, Send, Loader2 } from 'lucide-react'
+import { Mail, Clock, Upload, AlertCircle, Send, Loader2 } from 'lucide-react'
 import GlassCard from '@/components/GlassCard'
 import ConfirmationModal from '@/components/ConfirmationModal'
 import { createQuoteRequest, sendQuoteRequestEmail, QuoteRequest } from '@/lib/base44'
@@ -313,41 +313,41 @@ ${data.name}`
   return (
     <div className="pt-0">
       {/* Hero Section */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             <span className="gradient-text">Get in Touch</span>
           </h1>
-          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
             Ready to start your project? Fill out the form below and we'll get back to you within 24 hours.
           </p>
         </div>
       </section>
 
-      <section className="py-12 md:py-16">
+      <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Contact Information */}
-            <div className="lg:col-span-1 space-y-6">
+            <div className="lg:col-span-1 space-y-4 sm:space-y-6">
               {/* Logo and Intro */}
-              <div className="mb-6">
-                <h2 className="text-3xl font-bold gradient-text mb-4">Horizon WEB SERVICES</h2>
-                <p className="text-gray-600">
+              <div className="mb-4 sm:mb-6">
+                <h2 className="text-2xl sm:text-3xl font-bold gradient-text mb-3 sm:mb-4">Horizon WEB SERVICES</h2>
+                <p className="text-gray-600 text-sm sm:text-base">
                   We'd love to hear from you. Send us a message and we'll respond as soon as possible.
                 </p>
               </div>
 
               <GlassCard className="transition-all duration-300 hover:border-primary hover:border-2">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="text-primary" size={24} />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Mail className="text-primary" size={20} />
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1 text-gray-900">Email Us</h3>
-                    <p className="text-gray-500 text-sm mb-2">Drop us a line anytime</p>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold mb-1 text-gray-900 text-sm sm:text-base">Email Us</h3>
+                    <p className="text-gray-500 text-xs sm:text-sm mb-2">Drop us a line anytime</p>
                     <a
                       href="mailto:hello@horizonwebservices.co.za"
-                      className="text-gray-600 hover:text-primary transition-colors"
+                      className="text-gray-600 hover:text-primary transition-colors text-sm sm:text-base break-words"
                     >
                       hello@horizonwebservices.co.za
                     </a>
@@ -356,32 +356,14 @@ ${data.name}`
               </GlassCard>
 
               <GlassCard className="transition-all duration-300 hover:border-primary hover:border-2">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="text-secondary" size={24} />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Clock className="text-accent" size={20} />
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1 text-gray-900">Call Us</h3>
-                    <p className="text-gray-500 text-sm mb-2">Mon-Fri from 9am to 5pm</p>
-                    <a
-                      href="tel:+27123456789"
-                      className="text-gray-600 hover:text-primary transition-colors"
-                    >
-                      +27 12 345 6789
-                    </a>
-                  </div>
-                </div>
-              </GlassCard>
-
-              <GlassCard className="transition-all duration-300 hover:border-primary hover:border-2">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                    <Clock className="text-accent" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1 text-gray-900">Business Hours</h3>
-                    <p className="text-gray-500 text-sm mb-2">When we're available</p>
-                    <p className="text-gray-600">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold mb-1 text-gray-900 text-sm sm:text-base">Business Hours</h3>
+                    <p className="text-gray-500 text-xs sm:text-sm mb-2">When we're available</p>
+                    <p className="text-gray-600 text-sm sm:text-base">
                       Mon-Fri: 9:00 AM - 5:00 PM SAST
                     </p>
                   </div>
@@ -390,9 +372,9 @@ ${data.name}`
 
               {/* Quick Response Guarantee */}
               <GlassCard className="bg-cyan-50 border-cyan-200/50 transition-all duration-300 hover:border-primary hover:border-2">
-                <h3 className="font-semibold text-gray-900 mb-2">Quick Response Guarantee</h3>
-                <p className="text-gray-600 text-sm">
-                  We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call us directly.
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Quick Response Guarantee</h3>
+                <p className="text-gray-600 text-xs sm:text-sm">
+                  We typically respond to all inquiries within 24 hours during business days.
                 </p>
               </GlassCard>
             </div>
@@ -400,7 +382,7 @@ ${data.name}`
             {/* Quote Request Form */}
             <div className="lg:col-span-2">
               <GlassCard>
-                <h2 className="text-3xl font-bold mb-6 gradient-text">Request a Quote</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 gradient-text">Request a Quote</h2>
 
                 {/* Confirmation Modal */}
                 <ConfirmationModal
@@ -426,8 +408,8 @@ ${data.name}`
                   </motion.div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium mb-2">
                         Full Name *
@@ -657,7 +639,7 @@ ${data.name}`
                   <motion.button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full px-8 py-4 bg-gradient-primary text-white rounded-full font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-primary text-white rounded-full font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none text-sm sm:text-base"
                     whileHover={!isSubmitting ? { scale: 1.02 } : {}}
                     whileTap={!isSubmitting ? { scale: 0.98 } : {}}
                   >

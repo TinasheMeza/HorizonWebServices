@@ -100,10 +100,10 @@ export default function Home() {
   return (
     <div className="pt-0">
       {/* Hero Section */}
-      <section className="relative py-16 md:py-20 flex items-center justify-center overflow-hidden">
+      <section className="relative py-12 sm:py-16 md:py-20 flex items-center justify-center overflow-hidden">
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 mb-6"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white border border-gray-200 rounded-full text-xs sm:text-sm font-medium text-gray-700 mb-4 sm:mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -112,7 +112,7 @@ export default function Home() {
             Horizon Web Services
           </motion.div>
           <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 leading-tight px-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
@@ -121,7 +121,7 @@ export default function Home() {
             <span className="gradient-text block md:inline">Personal Brands & Businesses</span>
           </motion.h1>
           <motion.p
-            className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
@@ -129,17 +129,18 @@ export default function Home() {
             Get a modern website that grows your business. We handle design, development, and marketing so you can focus on what matters.
           </motion.p>
           <motion.div
-            className="flex flex-col sm:flex-row gap-3 justify-center"
+            className="flex flex-col sm:flex-row gap-3 justify-center px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <NeonButton onClick={() => (window.location.href = '/contact')}>
+            <NeonButton onClick={() => (window.location.href = '/contact')} className="w-full sm:w-auto">
               Get a Free Quote
             </NeonButton>
             <NeonButton
               variant="outline"
               onClick={() => (window.location.href = '/services')}
+              className="w-full sm:w-auto"
             >
               View Services
             </NeonButton>
@@ -148,13 +149,13 @@ export default function Home() {
       </section>
 
       {/* Services Overview */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="What We Do"
             subtitle="From concept to launch, we deliver digital solutions that make an impact."
           />
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {services.map((service, idx) => (
               <ServiceCard
                 key={idx}
@@ -174,13 +175,13 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="Why Choose Horizon"
             subtitle="We're not just another agency. We're your digital growth partners."
           />
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {whyChooseUs.map((item, idx) => (
               <GlassCard key={idx}>
                 <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary">
@@ -195,7 +196,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials / Reviews Carousel */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="What Clients Say"
@@ -216,17 +217,17 @@ export default function Home() {
             maxReviews={10}
           />
           
-          <p className="text-center text-gray-500 text-sm mt-8">
+          <p className="text-center text-gray-500 text-xs sm:text-sm mt-6 sm:mt-8 px-4">
             * Reviews represent the experiences of our valued clients
           </p>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 md:py-16 bg-gradient-primary text-white">
+      <section className="py-8 sm:py-12 md:py-16 bg-gradient-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-5"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -235,7 +236,7 @@ export default function Home() {
             Ready to Get Started?
           </motion.h2>
           <motion.p
-            className="text-lg mb-8 text-white/90"
+            className="text-base sm:text-lg mb-6 sm:mb-8 text-white/90"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -251,7 +252,7 @@ export default function Home() {
           >
             <NeonButton
               onClick={() => (window.location.href = '/contact')}
-              className="bg-white text-primary hover:bg-gray-100"
+              className="bg-white text-primary hover:bg-gray-100 w-full sm:w-auto"
             >
               Request a Free Quote
             </NeonButton>

@@ -64,16 +64,16 @@ export default function PortfolioCard({ project, onCardClick, index }: Portfolio
           </div>
 
           {/* Content */}
-          <div className="p-6 flex flex-col flex-grow">
+          <div className="p-4 sm:p-6 flex flex-col flex-grow">
             {/* Category Badge */}
-            <div className="mb-3">
-              <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-semibold">
+            <div className="mb-2 sm:mb-3">
+              <span className="inline-block px-2.5 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-semibold">
                 {project.category}
               </span>
             </div>
 
             {/* Title */}
-            <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">
+            <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-gray-900 group-hover:text-primary transition-colors">
               {project.title}
             </h3>
 
@@ -97,7 +97,7 @@ export default function PortfolioCard({ project, onCardClick, index }: Portfolio
             )}
 
             {/* Description */}
-            <p className="text-gray-600 mb-6 flex-grow leading-relaxed">
+            <p className="text-gray-600 mb-4 sm:mb-6 flex-grow leading-relaxed text-sm sm:text-base">
               {project.description}
             </p>
 
@@ -105,7 +105,7 @@ export default function PortfolioCard({ project, onCardClick, index }: Portfolio
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`w-full px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+              className={`w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base ${
                 isComingSoon
                   ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                   : 'bg-gradient-primary text-white hover:shadow-lg hover:shadow-primary/50'

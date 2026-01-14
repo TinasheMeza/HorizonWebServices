@@ -140,9 +140,6 @@ const upcomingProjects: Project[] = [
   },
 ]
 
-// Combine all projects
-const allProjects = [...liveProjects, ...upcomingProjects]
-
 export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)

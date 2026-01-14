@@ -12,9 +12,8 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Phone, Clock, Upload, CheckCircle, AlertCircle, Send, Loader2 } from 'lucide-react'
+import { Mail, Phone, Clock, Upload, AlertCircle, Send, Loader2 } from 'lucide-react'
 import GlassCard from '@/components/GlassCard'
-import NeonButton from '@/components/NeonButton'
 import ConfirmationModal from '@/components/ConfirmationModal'
 import { createQuoteRequest, sendQuoteRequestEmail, QuoteRequest } from '@/lib/base44'
 
@@ -36,18 +35,28 @@ const budgetRanges = [
   'R50,000+',
 ]
 
+interface FormDataState {
+  name: string
+  email: string
+  phone: string
+  service: string
+  budgetRange: string
+  projectDescription: string
+  file: File | null
+}
+
 export default function Contact() {
   const [searchParams] = useSearchParams()
   const preselectedService = searchParams.get('service')
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataState>({
     name: '',
     email: '',
     phone: '',
     service: preselectedService || '',
     budgetRange: '',
     projectDescription: '',
-    file: null as File | null,
+    file: null,
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -176,29 +185,29 @@ export default function Contact() {
    * Opens default email application with pre-filled details
    * Triggered after successful form submission
    */
-  const openEmailApp = (formData: typeof formData) => {
+  const openEmailApp = (data: FormDataState) => {
     const businessEmail = 'info@horizonwebservices.co.za'
-    const subject = encodeURIComponent(`New Quote Request – ${formData.name}`)
+    const subject = encodeURIComponent(`New Quote Request – ${data.name}`)
     const body = encodeURIComponent(
       `Hello Horizon Web Services,
 
 I would like to request a quote for the following:
 
-Name: ${formData.name}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Service: ${formData.service}
-Budget Range: ${formData.budgetRange}
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Service: ${data.service}
+Budget Range: ${data.budgetRange}
 
 Project Description:
-${formData.projectDescription}
+${data.projectDescription}
 
-${formData.file ? `Attached File: ${formData.file.name}` : ''}
+${data.file ? `Attached File: ${data.file.name}` : ''}
 
 Thank you for your time and consideration.
 
 Best regards,
-${formData.name}`
+${data.name}`
     )
 
     const mailtoLink = `mailto:${businessEmail}?subject=${subject}&body=${body}`

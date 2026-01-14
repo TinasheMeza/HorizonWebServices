@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Code, Globe, TrendingUp, Star, Quote, Zap, Shield, Users, BarChart3, Clock, Heart, Share2, Image, Settings } from 'lucide-react'
+import { Code, Globe, TrendingUp, Zap, Shield, Users, BarChart3, Clock, Heart, Share2, Image, Settings } from 'lucide-react'
 import SectionTitle from '@/components/SectionTitle'
 import GlassCard from '@/components/GlassCard'
 import NeonButton from '@/components/NeonButton'

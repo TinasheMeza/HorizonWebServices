@@ -7,7 +7,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import ReviewsCarousel from './ReviewsCarousel'
-import { Loader2, AlertCircle } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 
 interface Review {
   author_name: string

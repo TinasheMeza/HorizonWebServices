@@ -1,9 +1,21 @@
+/**
+ * Contact Page Component
+ * 
+ * Features:
+ * - Full client-side form validation with inline errors
+ * - Animated confirmation modal on successful submission
+ * - Email app trigger with pre-filled details
+ * - Enhanced submit button with loading states
+ * - Accessibility compliant (screen reader friendly)
+ */
+
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Phone, Clock, Upload, CheckCircle, AlertCircle, Send } from 'lucide-react'
+import { Mail, Phone, Clock, Upload, CheckCircle, AlertCircle, Send, Loader2 } from 'lucide-react'
 import GlassCard from '@/components/GlassCard'
 import NeonButton from '@/components/NeonButton'
+import ConfirmationModal from '@/components/ConfirmationModal'
 import { createQuoteRequest, sendQuoteRequestEmail, QuoteRequest } from '@/lib/base44'
 
 const services = [
@@ -41,6 +53,8 @@ export default function Contact() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     if (preselectedService) {
@@ -48,43 +62,151 @@ export default function Contact() {
     }
   }, [preselectedService])
 
+  /**
+   * Enhanced form validation with detailed error messages
+   * Validates all fields and provides clear, accessible error messages
+   */
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
 
+    // Name validation
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required'
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters'
     }
 
+    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
+      newErrors.email = 'Please enter a valid email address (e.g., name@example.com)'
     }
 
+    // Phone validation
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required'
+    } else if (!/^[\d\s\+\-\(\)]+$/.test(formData.phone)) {
+      newErrors.phone = 'Please enter a valid phone number'
+    } else if (formData.phone.replace(/\D/g, '').length < 10) {
+      newErrors.phone = 'Phone number must contain at least 10 digits'
     }
 
+    // Service validation
     if (!formData.service) {
       newErrors.service = 'Please select a service'
     }
 
+    // Budget range validation
     if (!formData.budgetRange) {
       newErrors.budgetRange = 'Please select a budget range'
     }
 
+    // Project description validation
     if (!formData.projectDescription.trim()) {
       newErrors.projectDescription = 'Project description is required'
     } else if (formData.projectDescription.trim().length < 20) {
       newErrors.projectDescription = 'Please provide more details (at least 20 characters)'
+    } else if (formData.projectDescription.trim().length > 2000) {
+      newErrors.projectDescription = 'Description must be less than 2000 characters'
     }
 
+    // File validation
     if (formData.file && formData.file.size > 10 * 1024 * 1024) {
       newErrors.file = 'File size must be less than 10MB'
     }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
+  }
+
+  /**
+   * Validates a single field (for real-time validation)
+   */
+  const validateField = (fieldName: string, value: string | File | null) => {
+    const newErrors = { ...errors }
+
+    switch (fieldName) {
+      case 'name':
+        if (!value || (typeof value === 'string' && !value.trim())) {
+          newErrors.name = 'Name is required'
+        } else if (typeof value === 'string' && value.trim().length < 2) {
+          newErrors.name = 'Name must be at least 2 characters'
+        } else {
+          delete newErrors.name
+        }
+        break
+      case 'email':
+        if (!value || (typeof value === 'string' && !value.trim())) {
+          newErrors.email = 'Email is required'
+        } else if (typeof value === 'string' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          newErrors.email = 'Please enter a valid email address'
+        } else {
+          delete newErrors.email
+        }
+        break
+      case 'phone':
+        if (!value || (typeof value === 'string' && !value.trim())) {
+          newErrors.phone = 'Phone number is required'
+        } else if (typeof value === 'string' && !/^[\d\s\+\-\(\)]+$/.test(value)) {
+          newErrors.phone = 'Please enter a valid phone number'
+        } else if (typeof value === 'string' && value.replace(/\D/g, '').length < 10) {
+          newErrors.phone = 'Phone number must contain at least 10 digits'
+        } else {
+          delete newErrors.phone
+        }
+        break
+      case 'projectDescription':
+        if (!value || (typeof value === 'string' && !value.trim())) {
+          newErrors.projectDescription = 'Project description is required'
+        } else if (typeof value === 'string' && value.trim().length < 20) {
+          newErrors.projectDescription = 'Please provide more details (at least 20 characters)'
+        } else if (typeof value === 'string' && value.trim().length > 2000) {
+          newErrors.projectDescription = 'Description must be less than 2000 characters'
+        } else {
+          delete newErrors.projectDescription
+        }
+        break
+    }
+
+    setErrors(newErrors)
+  }
+
+  /**
+   * Opens default email application with pre-filled details
+   * Triggered after successful form submission
+   */
+  const openEmailApp = (formData: typeof formData) => {
+    const businessEmail = 'info@horizonwebservices.co.za'
+    const subject = encodeURIComponent(`New Quote Request – ${formData.name}`)
+    const body = encodeURIComponent(
+      `Hello Horizon Web Services,
+
+I would like to request a quote for the following:
+
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Service: ${formData.service}
+Budget Range: ${formData.budgetRange}
+
+Project Description:
+${formData.projectDescription}
+
+${formData.file ? `Attached File: ${formData.file.name}` : ''}
+
+Thank you for your time and consideration.
+
+Best regards,
+${formData.name}`
+    )
+
+    const mailtoLink = `mailto:${businessEmail}?subject=${subject}&body=${body}`
+    
+    // Open email client
+    window.location.href = mailtoLink
+    
+    console.log('Email app triggered with pre-filled details')
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,28 +255,50 @@ export default function Contact() {
       // Send email notification
       await sendQuoteRequestEmail(created as QuoteRequest)
 
+      console.log('Form submitted successfully:', created)
+
+      // Show confirmation modal
+      setShowConfirmationModal(true)
       setSubmitStatus('success')
       
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        budgetRange: '',
-        projectDescription: '',
-        file: null,
-      })
+      // Reset form after a short delay
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: preselectedService || '',
+          budgetRange: '',
+          projectDescription: '',
+          file: null,
+        })
+        setTouchedFields({})
+        setErrors({})
 
-      // Reset file input
-      const fileInput = document.getElementById('file') as HTMLInputElement
-      if (fileInput) fileInput.value = ''
+        // Reset file input
+        const fileInput = document.getElementById('file') as HTMLInputElement
+        if (fileInput) fileInput.value = ''
+      }, 500)
+
+      // Open email app after confirmation modal is shown (with slight delay)
+      setTimeout(() => {
+        openEmailApp(formData)
+      }, 1000)
     } catch (error) {
       console.error('Error submitting form:', error)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  /**
+   * Handles field blur events for real-time validation
+   */
+  const handleBlur = (fieldName: string) => {
+    setTouchedFields(prev => ({ ...prev, [fieldName]: true }))
+    const value = formData[fieldName as keyof typeof formData]
+    validateField(fieldName, value as string | File | null)
   }
 
   return (
@@ -249,21 +393,13 @@ export default function Contact() {
               <GlassCard>
                 <h2 className="text-3xl font-bold mb-6 gradient-text">Request a Quote</h2>
 
-                {submitStatus === 'success' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3"
-                  >
-                    <CheckCircle className="text-green-600 flex-shrink-0 mt-0.5" size={20} />
-                    <div>
-                      <p className="font-semibold text-green-800">Thank you for your request!</p>
-                      <p className="text-green-700 text-sm mt-1">
-                        We've received your quote request and will get back to you within 24 hours.
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
+                {/* Confirmation Modal */}
+                <ConfirmationModal
+                  isOpen={showConfirmationModal}
+                  onClose={() => setShowConfirmationModal(false)}
+                  title="Request Submitted Successfully!"
+                  message="Your request has been successfully submitted. Our team will review it and get back to you shortly. We've also opened your email client to send a copy of your request."
+                />
 
                 {submitStatus === 'error' && (
                   <motion.div
@@ -293,19 +429,22 @@ export default function Contact() {
                         value={formData.name}
                         onChange={(e) => {
                           setFormData(prev => ({ ...prev, name: e.target.value }))
-                          setErrors(prev => {
-                            const newErrors = { ...prev }
-                            delete newErrors.name
-                            return newErrors
-                          })
+                          if (touchedFields.name) {
+                            validateField('name', e.target.value)
+                          }
                         }}
+                        onBlur={() => handleBlur('name')}
                         className={`w-full px-4 py-3 rounded-lg border ${
-                          errors.name ? 'border-red-500' : 'border-gray-300'
-                        } focus:outline-none focus:ring-2 focus:ring-primary`}
+                          errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary'
+                        } focus:outline-none focus:ring-2 transition-colors`}
                         placeholder="John Doe"
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? 'name-error' : undefined}
                       />
                       {errors.name && (
-                        <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                        <p id="name-error" className="text-red-500 text-sm mt-1" role="alert">
+                          {errors.name}
+                        </p>
                       )}
                     </div>
 
@@ -319,19 +458,22 @@ export default function Contact() {
                         value={formData.email}
                         onChange={(e) => {
                           setFormData(prev => ({ ...prev, email: e.target.value }))
-                          setErrors(prev => {
-                            const newErrors = { ...prev }
-                            delete newErrors.email
-                            return newErrors
-                          })
+                          if (touchedFields.email) {
+                            validateField('email', e.target.value)
+                          }
                         }}
+                        onBlur={() => handleBlur('email')}
                         className={`w-full px-4 py-3 rounded-lg border ${
-                          errors.email ? 'border-red-500' : 'border-gray-300'
-                        } focus:outline-none focus:ring-2 focus:ring-primary`}
+                          errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary'
+                        } focus:outline-none focus:ring-2 transition-colors`}
                         placeholder="john@example.com"
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? 'email-error' : undefined}
                       />
                       {errors.email && (
-                        <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                        <p id="email-error" className="text-red-500 text-sm mt-1" role="alert">
+                          {errors.email}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -346,19 +488,22 @@ export default function Contact() {
                       value={formData.phone}
                       onChange={(e) => {
                         setFormData(prev => ({ ...prev, phone: e.target.value }))
-                        setErrors(prev => {
-                          const newErrors = { ...prev }
-                          delete newErrors.phone
-                          return newErrors
-                        })
+                        if (touchedFields.phone) {
+                          validateField('phone', e.target.value)
+                        }
                       }}
+                      onBlur={() => handleBlur('phone')}
                       className={`w-full px-4 py-3 rounded-lg border ${
-                        errors.phone ? 'border-red-500' : 'border-gray-300'
-                      } focus:outline-none focus:ring-2 focus:ring-primary`}
+                        errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary'
+                      } focus:outline-none focus:ring-2 transition-colors`}
                       placeholder="+27 12 345 6789"
+                      aria-invalid={!!errors.phone}
+                      aria-describedby={errors.phone ? 'phone-error' : undefined}
                     />
                     {errors.phone && (
-                      <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                      <p id="phone-error" className="text-red-500 text-sm mt-1" role="alert">
+                        {errors.phone}
+                      </p>
                     )}
                   </div>
 
@@ -378,8 +523,10 @@ export default function Contact() {
                         })
                       }}
                       className={`w-full px-4 py-3 rounded-lg border ${
-                        errors.service ? 'border-red-500' : 'border-gray-300'
-                      } focus:outline-none focus:ring-2 focus:ring-primary`}
+                        errors.service ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary'
+                      } focus:outline-none focus:ring-2 transition-colors`}
+                      aria-invalid={!!errors.service}
+                      aria-describedby={errors.service ? 'service-error' : undefined}
                     >
                       <option value="">Select a service</option>
                       {services.map((service) => (
@@ -389,7 +536,9 @@ export default function Contact() {
                       ))}
                     </select>
                     {errors.service && (
-                      <p className="text-red-500 text-sm mt-1">{errors.service}</p>
+                      <p id="service-error" className="text-red-500 text-sm mt-1" role="alert">
+                        {errors.service}
+                      </p>
                     )}
                   </div>
 
@@ -409,8 +558,10 @@ export default function Contact() {
                         })
                       }}
                       className={`w-full px-4 py-3 rounded-lg border ${
-                        errors.budgetRange ? 'border-red-500' : 'border-gray-300'
-                      } focus:outline-none focus:ring-2 focus:ring-primary`}
+                        errors.budgetRange ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary'
+                      } focus:outline-none focus:ring-2 transition-colors`}
+                      aria-invalid={!!errors.budgetRange}
+                      aria-describedby={errors.budgetRange ? 'budgetRange-error' : undefined}
                     >
                       <option value="">Select budget range</option>
                       {budgetRanges.map((range) => (
@@ -420,7 +571,9 @@ export default function Contact() {
                       ))}
                     </select>
                     {errors.budgetRange && (
-                      <p className="text-red-500 text-sm mt-1">{errors.budgetRange}</p>
+                      <p id="budgetRange-error" className="text-red-500 text-sm mt-1" role="alert">
+                        {errors.budgetRange}
+                      </p>
                     )}
                   </div>
 
@@ -433,23 +586,30 @@ export default function Contact() {
                       value={formData.projectDescription}
                       onChange={(e) => {
                         setFormData(prev => ({ ...prev, projectDescription: e.target.value }))
-                        setErrors(prev => {
-                          const newErrors = { ...prev }
-                          delete newErrors.projectDescription
-                          return newErrors
-                        })
+                        if (touchedFields.projectDescription) {
+                          validateField('projectDescription', e.target.value)
+                        }
                       }}
+                      onBlur={() => handleBlur('projectDescription')}
                       rows={6}
                       className={`w-full px-4 py-3 rounded-lg border ${
-                        errors.projectDescription ? 'border-red-500' : 'border-gray-300'
-                      } focus:outline-none focus:ring-2 focus:ring-primary resize-none`}
+                        errors.projectDescription ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary'
+                      } focus:outline-none focus:ring-2 resize-none transition-colors`}
                       placeholder="Tell us about your project requirements, goals, and any specific features you need..."
+                      aria-invalid={!!errors.projectDescription}
+                      aria-describedby={errors.projectDescription ? 'projectDescription-error' : 'projectDescription-help'}
                     />
                     {errors.projectDescription && (
-                      <p className="text-red-500 text-sm mt-1">{errors.projectDescription}</p>
+                      <p id="projectDescription-error" className="text-red-500 text-sm mt-1" role="alert">
+                        {errors.projectDescription}
+                      </p>
                     )}
-                    <p className="text-gray-500 text-sm mt-1">
-                      {formData.projectDescription.length} characters (minimum 20)
+                    <p id="projectDescription-help" className={`text-sm mt-1 ${
+                      formData.projectDescription.length < 20 || formData.projectDescription.length > 2000
+                        ? 'text-amber-600'
+                        : 'text-gray-500'
+                    }`}>
+                      {formData.projectDescription.length} characters (minimum 20, maximum 2000)
                     </p>
                   </div>
 
@@ -485,20 +645,25 @@ export default function Contact() {
                     )}
                   </div>
 
-                  <NeonButton
+                  <motion.button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2"
                     disabled={isSubmitting}
+                    className="w-full px-8 py-4 bg-gradient-primary text-white rounded-full font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                    whileHover={!isSubmitting ? { scale: 1.02 } : {}}
+                    whileTap={!isSubmitting ? { scale: 0.98 } : {}}
                   >
                     {isSubmitting ? (
-                      'Submitting...'
+                      <>
+                        <Loader2 className="animate-spin" size={20} />
+                        <span>Submitting...</span>
+                      </>
                     ) : (
                       <>
                         <Send size={20} />
-                        Submit Quote Request
+                        <span>Submit Quote Request</span>
                       </>
                     )}
-                  </NeonButton>
+                  </motion.button>
                 </form>
               </GlassCard>
             </div>

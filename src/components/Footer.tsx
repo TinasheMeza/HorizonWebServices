@@ -69,26 +69,29 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
-          <div>
-            <h4 className="font-semibold text-gray-900 mb-3">Company</h4>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className="text-gray-600 hover:text-primary transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Company & Contact - Side by side on mobile */}
+          <div className="md:col-span-1 lg:col-span-2">
+            <div className="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-6 md:gap-0">
+              {/* Company */}
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3">Company</h4>
+                <ul className="space-y-2">
+                  {footerLinks.company.map((link) => (
+                    <li key={link.path}>
+                      <Link
+                        to={link.path}
+                        className="text-gray-600 hover:text-primary transition-colors text-sm"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="font-semibold text-gray-900 mb-3">Contact</h4>
+              {/* Contact Info */}
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3">Contact</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <Mail className="text-primary mt-0.5 flex-shrink-0" size={18} />
@@ -115,6 +118,8 @@ export default function Footer() {
                 </span>
               </li>
             </ul>
+              </div>
+            </div>
           </div>
         </div>
 

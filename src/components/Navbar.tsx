@@ -1,3 +1,14 @@
+/**
+ * Navigation Bar Component
+ * 
+ * Features:
+ * - Responsive design (desktop and mobile)
+ * - Smooth animations with Framer Motion
+ * - Active route highlighting
+ * - Mobile menu with slide animation
+ * - Accessible navigation (ARIA labels)
+ */
+
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'

@@ -1,4 +1,15 @@
-import { useState } from 'react'
+/**
+ * Project Carousel Component
+ * 
+ * Displays portfolio projects in a carousel with:
+ * - Smooth transitions between projects
+ * - Mobile swipe gestures (touch-friendly)
+ * - Desktop navigation buttons
+ * - Dot indicators for navigation
+ * - Accessibility features
+ */
+
+import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import GlassCard from './GlassCard'
@@ -11,7 +22,12 @@ export interface Project {
   description: string
   image: string
   liveUrl?: string
-  tags: string[]
+  tags?: string[]
+  // New fields for enhanced portfolio
+  industry?: string
+  businessType?: string
+  businessGoals?: string[]
+  keyOutcomes?: string[]
 }
 
 interface ProjectCarouselProps {
@@ -20,6 +36,12 @@ interface ProjectCarouselProps {
 
 export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Minimum swipe distance (in pixels) for mobile
+  const minSwipeDistance = 50
 
   const nextProject = () => {
     setCurrentIndex((prev) => (prev + 1) % projects.length)
@@ -33,10 +55,40 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
     setCurrentIndex(index)
   }
 
+  /**
+   * Touch event handlers for mobile swipe gestures
+   * Enables smooth, touch-friendly navigation on mobile devices
+   */
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      nextProject()
+    } else if (isRightSwipe) {
+      prevProject()
+    }
+
+    setTouchStart(null)
+    setTouchEnd(null)
+  }
+
   const currentProject = projects[currentIndex]
 
   return (
-    <div className="relative">
+    <div className="relative" ref={containerRef}>
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -44,6 +96,10 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
           transition={{ duration: 0.5 }}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          className="touch-pan-y"
         >
           <GlassCard className="overflow-hidden">
             <div className="grid md:grid-cols-2 gap-8">
@@ -86,12 +142,13 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation */}
-      <div className="flex items-center justify-center gap-4 mt-8">
+      {/* Navigation - Hidden on mobile, visible on desktop */}
+      <div className="hidden md:flex items-center justify-center gap-4 mt-8">
         <button
           onClick={prevProject}
           className="p-2 rounded-full bg-white/70 backdrop-blur-md border border-white/20 hover:bg-white transition-colors"
           aria-label="Previous project"
+          type="button"
         >
           <ChevronLeft size={24} className="text-primary" />
         </button>
@@ -116,9 +173,15 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
           onClick={nextProject}
           className="p-2 rounded-full bg-white/70 backdrop-blur-md border border-white/20 hover:bg-white transition-colors"
           aria-label="Next project"
+          type="button"
         >
           <ChevronRight size={24} className="text-primary" />
         </button>
+      </div>
+
+      {/* Mobile swipe hint (optional, can be removed if not needed) */}
+      <div className="md:hidden text-center mt-4">
+        <p className="text-xs text-gray-500">Swipe left or right to navigate</p>
       </div>
     </div>
   )

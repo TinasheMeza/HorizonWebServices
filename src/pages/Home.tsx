@@ -5,6 +5,7 @@ import GlassCard from '@/components/GlassCard'
 import NeonButton from '@/components/NeonButton'
 import ServiceCard from '@/components/ServiceCard'
 import { PricingTier } from '@/components/ServiceCard'
+import ReviewsCarouselWithGoogle from '@/components/ReviewsCarouselWithGoogle'
 
 const services: Array<{
   title: string
@@ -193,32 +194,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Testimonials / Reviews Carousel */}
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             title="What Clients Say"
             subtitle="Don't just take our word for it — hear from those who've worked with us"
           />
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, idx) => (
-              <GlassCard key={idx} className="relative border border-gray-200">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="fill-amber-400 text-amber-400" size={16} />
-                  ))}
-                </div>
-                <Quote className="text-gray-300 mb-3 absolute top-4 right-4" size={32} />
-                <p className="text-gray-700 mb-5 text-sm leading-relaxed">"{testimonial.text}"</p>
-                <div className="pt-4 border-t border-gray-100">
-                  <p className="font-semibold text-gray-900 text-sm">Client Testimonial</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{testimonial.role}</p>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
+          
+          {/* Reviews Carousel with Google Reviews Integration */}
+          <ReviewsCarouselWithGoogle
+            placeId={import.meta.env.VITE_GOOGLE_PLACE_ID}
+            apiKey={import.meta.env.VITE_GOOGLE_API_KEY}
+            fallbackReviews={testimonials.map((t) => ({
+              author_name: `Client - ${t.role}`,
+              rating: t.rating,
+              text: t.text,
+              relative_time_description: 'Recent',
+            }))}
+            autoScrollInterval={5000}
+            maxReviews={10}
+          />
+          
           <p className="text-center text-gray-500 text-sm mt-8">
-            * Testimonials represent the experiences of our valued clients
+            * Reviews represent the experiences of our valued clients
           </p>
         </div>
       </section>

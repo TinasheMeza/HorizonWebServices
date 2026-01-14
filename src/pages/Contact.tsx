@@ -3,8 +3,8 @@
  * 
  * Features:
  * - Full client-side form validation with inline errors
- * - Animated confirmation modal on successful submission
- * - Email app trigger with pre-filled details
+ * - Redirects to default email app with pre-filled details on form submission
+ * - Shows return message when user comes back from email app
  * - Enhanced submit button with loading states
  * - Accessibility compliant (screen reader friendly)
  */
@@ -12,10 +12,8 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Clock, Upload, AlertCircle, Send, Loader2 } from 'lucide-react'
+import { Mail, Clock, Upload, AlertCircle, Send, Loader2, CheckCircle2, X } from 'lucide-react'
 import GlassCard from '@/components/GlassCard'
-import ConfirmationModal from '@/components/ConfirmationModal'
-import { createQuoteRequest, sendQuoteRequestEmail, QuoteRequest } from '@/lib/base44'
 
 const services = [
   'Custom Websites',
@@ -62,14 +60,24 @@ export default function Contact() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
+  const [showReturnMessage, setShowReturnMessage] = useState(false)
 
   useEffect(() => {
     if (preselectedService) {
       setFormData(prev => ({ ...prev, service: preselectedService }))
     }
   }, [preselectedService])
+
+  // Check if user returned from email app
+  useEffect(() => {
+    const emailRedirectFlag = sessionStorage.getItem('emailRedirected')
+    if (emailRedirectFlag === 'true') {
+      setShowReturnMessage(true)
+      // Clear the flag after showing the message
+      sessionStorage.removeItem('emailRedirected')
+    }
+  }, [])
 
   /**
    * Enhanced form validation with detailed error messages
@@ -183,10 +191,10 @@ export default function Contact() {
 
   /**
    * Opens default email application with pre-filled details
-   * Triggered after successful form submission
+   * Sets a flag in sessionStorage to detect when user returns
    */
   const openEmailApp = (data: FormDataState) => {
-    const businessEmail = 'info@horizonwebservices.co.za'
+    const businessEmail = 'hello@horizonwebservices.co.za'
     const subject = encodeURIComponent(`New Quote Request – ${data.name}`)
     const body = encodeURIComponent(
       `Hello Horizon Web Services,
@@ -202,7 +210,7 @@ Budget Range: ${data.budgetRange}
 Project Description:
 ${data.projectDescription}
 
-${data.file ? `Attached File: ${data.file.name}` : ''}
+${data.file ? `Note: I have a file to attach (${data.file.name}). Please let me know how to share it.` : ''}
 
 Thank you for your time and consideration.
 
@@ -212,10 +220,13 @@ ${data.name}`
 
     const mailtoLink = `mailto:${businessEmail}?subject=${subject}&body=${body}`
     
-    // Open email client
+    // Set flag to detect when user returns
+    sessionStorage.setItem('emailRedirected', 'true')
+    
+    // Open email client immediately
     window.location.href = mailtoLink
     
-    console.log('Email app triggered with pre-filled details')
+    console.log('Email app opened with pre-filled details')
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -234,7 +245,7 @@ ${data.name}`
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -242,63 +253,30 @@ ${data.name}`
     }
 
     setIsSubmitting(true)
-    setSubmitStatus('idle')
 
-    try {
-      // In a real implementation, you would upload the file first
-      // For now, we'll just store the file name
-      const fileUrl = formData.file ? formData.file.name : undefined
+    // Immediately open email app with pre-filled form data
+    openEmailApp(formData)
 
-      const quoteRequest: Omit<QuoteRequest, 'id' | 'status' | 'createdAt' | 'updatedAt'> = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        service: formData.service,
-        budgetRange: formData.budgetRange,
-        projectDescription: formData.projectDescription,
-        fileUrl,
-      }
+    // Reset form after a short delay (user will be redirected to email app)
+    setTimeout(() => {
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        service: preselectedService || '',
+        budgetRange: '',
+        projectDescription: '',
+        file: null,
+      })
+      setTouchedFields({})
+      setErrors({})
 
-      const created = await createQuoteRequest(quoteRequest)
+      // Reset file input
+      const fileInput = document.getElementById('file') as HTMLInputElement
+      if (fileInput) fileInput.value = ''
       
-      // Send email notification
-      await sendQuoteRequestEmail(created as QuoteRequest)
-
-      console.log('Form submitted successfully:', created)
-
-      // Show confirmation modal
-      setShowConfirmationModal(true)
-      setSubmitStatus('success')
-      
-      // Reset form after a short delay
-      setTimeout(() => {
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          service: preselectedService || '',
-          budgetRange: '',
-          projectDescription: '',
-          file: null,
-        })
-        setTouchedFields({})
-        setErrors({})
-
-        // Reset file input
-        const fileInput = document.getElementById('file') as HTMLInputElement
-        if (fileInput) fileInput.value = ''
-      }, 500)
-
-      // Open email app after confirmation modal is shown (with slight delay)
-      setTimeout(() => {
-        openEmailApp(formData)
-      }, 1000)
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      setSubmitStatus('error')
-    } finally {
       setIsSubmitting(false)
-    }
+    }, 100)
   }
 
   /**
@@ -323,6 +301,35 @@ ${data.name}`
           </p>
         </div>
       </section>
+
+      {/* Return Message Banner */}
+      {showReturnMessage && (
+        <section className="py-4 sm:py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6 flex items-start gap-4 relative"
+            >
+              <CheckCircle2 className="text-green-600 flex-shrink-0 mt-0.5" size={24} />
+              <div className="flex-1">
+                <h3 className="font-semibold text-green-900 mb-1 text-sm sm:text-base">Thank You!</h3>
+                <p className="text-green-800 text-sm sm:text-base">
+                  If you've sent the email from your email app, we've received your quote request. 
+                  Our team will review it and get back to you within 24 hours during business days.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowReturnMessage(false)}
+                className="absolute top-3 right-3 p-1 rounded-lg hover:bg-green-100 transition-colors"
+                aria-label="Close message"
+              >
+                <X size={18} className="text-green-700" />
+              </button>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       <section className="py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -384,14 +391,6 @@ ${data.name}`
               <GlassCard>
                 <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 gradient-text">Request a Quote</h2>
 
-                {/* Confirmation Modal */}
-                <ConfirmationModal
-                  isOpen={showConfirmationModal}
-                  onClose={() => setShowConfirmationModal(false)}
-                  title="Request Submitted Successfully!"
-                  message="Your request has been successfully submitted. Our team will review it and get back to you shortly. We've also opened your email client to send a copy of your request."
-                />
-
                 {submitStatus === 'error' && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
@@ -400,9 +399,12 @@ ${data.name}`
                   >
                     <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
                     <div>
-                      <p className="font-semibold text-red-800">Error submitting form</p>
+                      <p className="font-semibold text-red-800">Error opening email app</p>
                       <p className="text-red-700 text-sm mt-1">
-                        Please try again or contact us directly via email or phone.
+                        Please try again or contact us directly via email at{' '}
+                        <a href="mailto:hello@horizonwebservices.co.za" className="underline hover:text-red-900">
+                          hello@horizonwebservices.co.za
+                        </a>
                       </p>
                     </div>
                   </motion.div>

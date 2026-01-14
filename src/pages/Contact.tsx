@@ -12,7 +12,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Clock, Upload, AlertCircle, Send, Loader2, CheckCircle2, X } from 'lucide-react'
+import { Mail, Clock, Upload, Send, Loader2, CheckCircle2, X } from 'lucide-react'
 import GlassCard from '@/components/GlassCard'
 
 const services = [
@@ -59,7 +59,6 @@ export default function Contact() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
   const [showReturnMessage, setShowReturnMessage] = useState(false)
 
@@ -390,25 +389,6 @@ ${data.name}`
             <div className="lg:col-span-2">
               <GlassCard>
                 <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 gradient-text">Request a Quote</h2>
-
-                {submitStatus === 'error' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3"
-                  >
-                    <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
-                    <div>
-                      <p className="font-semibold text-red-800">Error opening email app</p>
-                      <p className="text-red-700 text-sm mt-1">
-                        Please try again or contact us directly via email at{' '}
-                        <a href="mailto:hello@horizonwebservices.co.za" className="underline hover:text-red-900">
-                          hello@horizonwebservices.co.za
-                        </a>
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
 
                 <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                   <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
